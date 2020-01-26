@@ -22,7 +22,7 @@ namespace Orders.App
 				if (env.IsDevelopment())
 				{
 					var context = services.GetRequiredService<OrdersDbContext>();
-					context.Database.EnsureDeleted();
+					//context.Database.EnsureDeleted();
 					context.Database.Migrate();
 					try
 					{
