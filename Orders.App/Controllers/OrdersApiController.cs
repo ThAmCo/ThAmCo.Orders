@@ -8,7 +8,7 @@ using Orders.DataAccess;
 
 namespace Orders.App.Controllers
 {
-    [Route("api/orders")]
+    [Route("orders/api")]
     [ApiController]
     public class OrdersApiController : ControllerBase
 	{
