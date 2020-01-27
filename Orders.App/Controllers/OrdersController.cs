@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Orders.App.Models;
 using Orders.DataAccess;
@@ -17,7 +18,8 @@ namespace Orders.App.Controllers
 		}
 
 		// GET: Orders
-		public async Task<IActionResult> OrderHistory(int profileId)
+		[Authorize]
+		public async Task<IActionResult> History(int profileId)
         {
 			var history = await _unitOfWork.Orders.GetOrderHistory(profileId);
 			var dispatches = await _unitOfWork.OrderDispatches.GetAll();
@@ -29,6 +31,12 @@ namespace Orders.App.Controllers
 
 			return View(history.GroupJoin(dispatches, order => order, dispatch => dispatch.Order, OrderHistoryViewModel.From));
         }
+
+		[Authorize(Policy = "StaffOnly")]
+		public async Task<IActionResult> Index()
+		{
+			return View(await _unitOfWork.Orders.GetAll());
+		}
 
     }
 }

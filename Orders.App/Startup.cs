@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Orders.App.Services;
 using Orders.Data.Persistence;
 using Orders.DataAccess;
-using System;
+using System.IO;
 
 namespace Orders.App
 {
@@ -45,6 +45,26 @@ namespace Orders.App
 				services.AddScoped<IUnitOfWork, OrdersDbUnitOfWork>();
 				services.AddScoped<IInvoicesService, HttpInvoicesService>();
 			}
+
+			services.AddDataProtection()
+				.PersistKeysToFileSystem(new DirectoryInfo(@"c:\shared-auth"))
+				.SetApplicationName("ThAmCo");
+
+			services.AddAuthentication("Cookies")
+				.AddCookie("Cookies", options =>
+				{
+					options.Cookie.Name = ".ThAmCo.SharedCookie";
+					options.Cookie.Path = "/";
+				});
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("StaffOnly", builder =>
+				{
+					builder.RequireClaim("role", "Staff");
+				});
+			});
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +85,7 @@ namespace Orders.App
 
 			app.UseRouting();
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
