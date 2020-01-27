@@ -24,23 +24,23 @@ namespace Orders.App.Controllers
 		}
 
 		[HttpPost("create")]
-		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,ProfileId,Price,PurchasheDateTime")] CreateOrderRequest request)
+		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,UserId,Email,Address,Price,PurchasheDateTime")] CreateOrderRequest request)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
 
-			var profile = await _unitOfWork.Profiles.Get(request.ProfileId.Value);
 			var product = await _unitOfWork.Products.Get(request.ProductId.Value);
 
-			var order = request.ToOrder(profile, product);
+			var order = request.ToOrder(product);
+
 			if (await _unitOfWork.Orders.Contains(order))
 			{
 				return Conflict(order + " already exists.");
 			}
 
-			await _invoicesService.PostOrder(order, profile.Email);
+			await _invoicesService.PostOrder(order, request.Email);
 
 			_unitOfWork.Orders.Create(order);
 			await _unitOfWork.Commit();

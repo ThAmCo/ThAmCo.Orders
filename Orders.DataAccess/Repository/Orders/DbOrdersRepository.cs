@@ -18,9 +18,9 @@ namespace Orders.DataAccess.Repository.Orders
 			return _dbSet.Include(o => o.Product);
 		}
 
-		public async Task<IEnumerable<Order>> GetOrderHistory(int profileId)
+		public async Task<IEnumerable<Order>> GetOrderHistory(string userId)
 		{
-			return await Including().Where(o => o.ProfileId == profileId).ToListAsync();
+			return await Including().Where(o => o.UserId.Equals(userId)).ToListAsync();
 		}
 
 		public async Task<bool> Contains(Order order)
@@ -28,7 +28,7 @@ namespace Orders.DataAccess.Repository.Orders
 			return await Including()
 				.Where(o => o.Id == order.Id ||
 				(o.PurchaseDateTime == order.PurchaseDateTime
-				&& o.ProfileId == order.ProfileId 
+				&& o.UserId.Equals(order.UserId) 
 				&& o.ProductId == order.ProductId))
 				.AnyAsync();
 

@@ -6,7 +6,7 @@ namespace Orders.App.Models
 	public class PostOrderRequest
 	{
 
-		public int ProfileId { get; set; }
+		public string UserId { get; set; }
 
 		public string ProductName { get; set; }
 
@@ -24,7 +24,7 @@ namespace Orders.App.Models
 		{
 			return new PostOrderRequest
 			{
-				ProfileId = order.ProfileId,
+				UserId = order.UserId,
 				Email = email,
 				Address = order.Address,
 				Name = order.Name,

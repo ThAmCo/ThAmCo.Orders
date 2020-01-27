@@ -3,7 +3,6 @@ using Orders.Data.Persistence;
 using Orders.DataAccess.Repository.OrderDispatches;
 using Orders.DataAccess.Repository.Orders;
 using Orders.DataAccess.Repository.Products;
-using Orders.DataAccess.Repository.Profiles;
 
 namespace Orders.DataAccess
 {
@@ -13,8 +12,6 @@ namespace Orders.DataAccess
 		private readonly OrdersDbContext _context;
 
 		private DbOrdersRepository _ordersRepository;
-
-		private DbProfilesRepository _profilesRepository;
 
 		private DbOrderDispatchesRepository _orderDispatchesRepository;
 
@@ -41,19 +38,6 @@ namespace Orders.DataAccess
 				return _ordersRepository;
 			}
 		}
-
-		public IProfilesRepository Profiles
-		{
-			get
-			{
-				if (_profilesRepository == null)
-				{
-					_profilesRepository = new DbProfilesRepository(_context.Profiles);
-				}
-				return _profilesRepository;
-			}
-		}
-
 		public IOrderDispatchesRepository OrderDispatches
 		{
 			get

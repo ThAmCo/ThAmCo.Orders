@@ -21,9 +21,9 @@ namespace Orders.DataAccess.Repository.Orders
 			return Task.FromResult(_elements.AsEnumerable());
 		}
 
-		public Task<IEnumerable<Order>> GetOrderHistory(int profileId)
+		public Task<IEnumerable<Order>> GetOrderHistory(string userId)
 		{
-			return Task.FromResult(_elements.Where(o => o.ProfileId == profileId).AsEnumerable());
+			return Task.FromResult(_elements.Where(o => o.UserId.Equals(userId)).AsEnumerable());
 		}
 	}
 }

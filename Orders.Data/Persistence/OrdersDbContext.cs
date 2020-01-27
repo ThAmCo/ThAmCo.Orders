@@ -7,8 +7,6 @@ namespace Orders.Data.Persistence
 	{
 		public DbSet<Product> Products { get; set; }
 
-		public DbSet<Profile> Profiles { get; set; }
-
 		public DbSet<Order> Orders { get; set; }
 
 		public DbSet<OrderDispatch> OrderDispatches { get; set; }
@@ -32,14 +30,6 @@ namespace Orders.Data.Persistence
 				e.Property(p => p.Description).IsRequired();
 			});
 
-			modelBuilder.Entity<Profile>(e =>
-			{
-				e.Property(p => p.Email).IsRequired();
-				e.Property(p => p.PhoneNumber).IsRequired();
-				e.Property(p => p.Name).IsRequired();
-				e.Property(p => p.Address).IsRequired();
-			});
-
 			modelBuilder.Entity<Order>(e =>
 			{
 				e.HasOne(o => o.Product)
@@ -47,11 +37,7 @@ namespace Orders.Data.Persistence
 					.HasForeignKey(o => o.ProductId)
 					.IsRequired();
 
-				e.HasOne(o => o.Profile)
-					.WithMany()
-					.HasForeignKey(o => o.ProfileId)
-					.IsRequired();
-
+				e.Property(p => p.UserId).IsRequired();
 				e.Property(p => p.Name).IsRequired();
 				e.Property(p => p.Address).IsRequired();
 				e.Property(o => o.Price).IsRequired();

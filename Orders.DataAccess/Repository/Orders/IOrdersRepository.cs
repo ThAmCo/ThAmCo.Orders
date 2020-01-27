@@ -9,7 +9,7 @@ namespace Orders.DataAccess.Repository.Orders
 
 		Task<IEnumerable<Order>> GetAll();
 
-		Task<IEnumerable<Order>> GetOrderHistory(int profileId);
+		Task<IEnumerable<Order>> GetOrderHistory(string userId);
 
 		Task<bool> Contains(Order order);
 

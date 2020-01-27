@@ -29,18 +29,9 @@ namespace Orders.Data.Persistence
 				new Product { Name = "Non-conductive Screen Protector", Description = "Guaranteed not to conduct electical charge from your fingers." }
 			};
 
-			var profiles = new Profile[]
+			for (int i = 0; i < 4; i++)
 			{
-				new Profile { Name = "Sam Hammersley - Gonsalves", Address = "1 Spaghetti Drive", Email = "sam.hammersley@outlook.com", PhoneNumber = "07941395171" },
-				new Profile { Name = "Tom Gonsalves", Address = "18 Holey Road", Email = "t.gonsalves@ntlworld.com", PhoneNumber = "07722281941" },
-				new Profile { Name = "Kim Hammersley - Gonsalves", Address = "5 Hello Close", Email = "k.gonsalves@ntlworld.com", PhoneNumber = "07594420143" },
-				new Profile { Name = "Francesca Hammersley - Gonsalves", Address = "3 China Road", Email = "francescahammersley@gmail.com", PhoneNumber = "07941395171" }
-			};
-
-			for (int i = 0; i < profiles.Length; i++)
-			{
-				var prof = profiles[i];
-				Orders.Add(new Order { ProfileId = i + 1, Address = prof.Address, Name = prof.Name, Price = 0.99, ProductId = i + 1, PurchaseDateTime = new DateTime(1995, 11, 26) });
+				Orders.Add(new Order { UserId = "492d9bb2-a82f-4752-abbf-561872142bd1", Address = "18 Lois Lane", Name = "Samuel Spaghetti Hammersley", Price = 0.99, ProductId = i + 1, PurchaseDateTime = new DateTime(1995, 11, 26) });
 
 				OrderDispatches.Add(new OrderDispatch { Order = Orders[i], DispatchDateTime = DateTime.Now });
 			}
@@ -48,15 +39,6 @@ namespace Orders.Data.Persistence
 			if (!context.Products.Any()) 
 			{
 				products.ForEach(p => context.Products.Add(p));
-				await context.SaveChangesAsync();
-			}
-
-			if (!context.Profiles.Any())
-			{
-				for (int i = 0; i < profiles.Length; i++)
-				{
-					context.Profiles.Add(profiles[i]);
-				}
 				await context.SaveChangesAsync();
 			}
 

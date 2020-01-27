@@ -4,7 +4,7 @@ namespace Orders.App.Models
 {
 	public class CreateInvoiceRequest
 	{
-		public int ProfileId { get; set; }
+		public string UserId { get; set; }
 
 		public string Name { get; set; }
 

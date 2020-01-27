@@ -12,9 +12,7 @@ namespace Orders.Data.Models
 		public Product Product { get; set; }
 
 		[Required]
-		public int ProfileId { get; set; }
-
-		public Profile Profile { get; set; }
+		public string UserId { get; set; }
 
 		[Required]
 		public string Name { get; set; }

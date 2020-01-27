@@ -17,11 +17,11 @@ namespace Orders.App.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		// GET: Orders
 		[Authorize]
-		public async Task<IActionResult> History(int profileId)
+		public async Task<IActionResult> History()
         {
-			var history = await _unitOfWork.Orders.GetOrderHistory(profileId);
+			var userId = User.FindFirst("sub").Value;
+			var history = await _unitOfWork.Orders.GetOrderHistory(userId);
 			var dispatches = await _unitOfWork.OrderDispatches.GetAll();
 
 			if (!history.Any())
