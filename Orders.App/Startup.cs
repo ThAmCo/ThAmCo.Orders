@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Orders.App.Services;
 using Orders.Data.Persistence;
 using Orders.DataAccess;
+using System;
 using System.IO;
 
 namespace Orders.App
@@ -46,8 +47,10 @@ namespace Orders.App
 				services.AddScoped<IInvoicesService, HttpInvoicesService>();
 			}
 
+			string azureStorageUri = Environment.GetEnvironmentVariable("COOKIE_STORAGE_URI");
+
 			services.AddDataProtection()
-				.PersistKeysToFileSystem(new DirectoryInfo(@"c:\shared-auth"))
+				.PersistKeysToAzureBlobStorage(new Uri(azureStorageUri))
 				.SetApplicationName("ThAmCo");
 
 			services.AddAuthentication("Cookies")
@@ -55,6 +58,9 @@ namespace Orders.App
 				{
 					options.Cookie.Name = ".ThAmCo.SharedCookie";
 					options.Cookie.Path = "/";
+					options.LoginPath = "/Home/Account/Login";
+					options.LogoutPath = "/Home/Account/Logout";
+					options.AccessDeniedPath = "/Home/Account/Login";
 				});
 
 			services.AddAuthorization(options =>
