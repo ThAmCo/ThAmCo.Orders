@@ -24,11 +24,6 @@ namespace Orders.App.Controllers
 			var history = await _unitOfWork.Orders.GetOrderHistory(userId);
 			var dispatches = await _unitOfWork.OrderDispatches.GetAll();
 
-			if (!history.Any())
-			{
-				return NotFound();
-			}
-
 			return View(history.GroupJoin(dispatches, order => order, dispatch => dispatch.Order, OrderHistoryViewModel.From));
         }
 

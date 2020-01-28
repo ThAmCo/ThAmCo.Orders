@@ -24,7 +24,6 @@ namespace Orders.App
 		public Startup(IConfiguration configuration, IWebHostEnvironment environment)
 		{
 			Configuration = configuration;
-
 			_environment = environment;
 		}
 
@@ -50,17 +49,26 @@ namespace Orders.App
 				services.AddScoped<IInvoicesService, HttpInvoicesService>();
 			}
 
-			string storageKey = Environment.GetEnvironmentVariable("BLOB_STORAGE_KEY");
+			if (_environment.IsDevelopment())
+			{
+				services.AddDataProtection()
+					.PersistKeysToFileSystem(new DirectoryInfo(@"c:/shared-cookies"))
+					.SetApplicationName("ThAmCo");
+			}
+			else
+			{
+				string storageKey = Environment.GetEnvironmentVariable("BLOB_STORAGE_KEY");
 
-			var credentials = new StorageCredentials("thamcostorage", storageKey);
-			var storageAccount = new CloudStorageAccount(credentials, true);
-			var blobClient = storageAccount.CreateCloudBlobClient();
+				var credentials = new StorageCredentials("thamcostorage", storageKey);
+				var storageAccount = new CloudStorageAccount(credentials, true);
+				var blobClient = storageAccount.CreateCloudBlobClient();
 
-			CloudBlobContainer container = blobClient.GetContainerReference("keys");
-			
-			services.AddDataProtection()
-				.PersistKeysToAzureBlobStorage(container, "cookies")
-				.SetApplicationName("ThAmCo");
+				CloudBlobContainer container = blobClient.GetContainerReference("keys");
+
+				services.AddDataProtection()
+					.PersistKeysToAzureBlobStorage(container, "cookies")
+					.SetApplicationName("ThAmCo");
+			}
 
 			services.AddAuthentication("Cookies")
 				.AddCookie("Cookies", options =>
@@ -70,6 +78,7 @@ namespace Orders.App
 					options.LoginPath = "/Home/Account/Login";
 					options.LogoutPath = "/Home/Account/Logout";
 					options.AccessDeniedPath = "/Home/Account/Login";
+					//options.Events.OnRedirectToLogin = c => c.RedirectUri = "";
 				});
 
 			services.AddAuthorization(options =>
@@ -102,12 +111,11 @@ namespace Orders.App
 
 			app.UseAuthentication();
 			app.UseAuthorization();
-
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=Orders}/{action=History}");
+					pattern: "{controller=Orders}/{action=Index}");
 			});
 		}
 	}
