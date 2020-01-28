@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Orders.Data.Persistence;
 using Orders.DataAccess;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Orders.App
 {
@@ -70,15 +72,33 @@ namespace Orders.App
 					.SetApplicationName("ThAmCo");
 			}
 
+			string homeBaseUrl = Environment.GetEnvironmentVariable("HOME_URL");
+
 			services.AddAuthentication("Cookies")
 				.AddCookie("Cookies", options =>
 				{
 					options.Cookie.Name = ".ThAmCo.SharedCookie";
 					options.Cookie.Path = "/";
-					options.LoginPath = "/Home/Account/Login";
-					options.LogoutPath = "/Home/Account/Logout";
-					options.AccessDeniedPath = "/Home/Account/Login";
-					//options.Events.OnRedirectToLogin = c => c.RedirectUri = "";
+					options.LoginPath = "/Account/Login";
+					options.LogoutPath = "/Account/Logout";
+
+					options.Events.OnRedirectToLogin = context =>
+					{
+						context.HttpContext.Response.Redirect(homeBaseUrl + options.LoginPath);
+						return Task.CompletedTask;
+					};
+
+					options.Events.OnRedirectToLogout = context =>
+					{
+						context.HttpContext.Response.Redirect(homeBaseUrl + options.LogoutPath);
+						return Task.CompletedTask;
+					};
+
+					options.Events.OnRedirectToAccessDenied = context =>
+					{
+						context.HttpContext.Response.Redirect(homeBaseUrl + options.LoginPath);
+						return Task.CompletedTask;
+					};
 				});
 
 			services.AddAuthorization(options =>
