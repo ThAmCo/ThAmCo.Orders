@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Orders.Data.Models.Order>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Orders</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayName("Name")
+			</th>
+			<th>
+				@Html.DisplayName("Price")
+			</th>
+			<th>
+				@Html.DisplayName("Address")
+			</th>
+			<th>
+				@Html.DisplayName("Purchased at")
+			</th>
+			<th>
+				@Html.DisplayName("Procuct Name")
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Name)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Price)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Address)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.PurchaseDateTime)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Product.Name)
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

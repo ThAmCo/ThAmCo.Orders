@@ -57,7 +57,7 @@ namespace Orders.App
 			var blobClient = storageAccount.CreateCloudBlobClient();
 
 			CloudBlobContainer container = blobClient.GetContainerReference("keys");
-
+			
 			services.AddDataProtection()
 				.PersistKeysToAzureBlobStorage(container, "cookies")
 				.SetApplicationName("ThAmCo");
@@ -107,7 +107,7 @@ namespace Orders.App
 			{
 				endpoints.MapControllerRoute(
 					name: "default",
-					pattern: "{controller=Orders}/{action=Index}/{id?}");
+					pattern: "{controller=Orders}/{action=History}");
 			});
 		}
 	}
