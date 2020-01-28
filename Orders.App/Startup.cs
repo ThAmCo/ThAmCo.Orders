@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Storage.Blob;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,8 +50,17 @@ namespace Orders.App
 
 			string azureStorageUri = Environment.GetEnvironmentVariable("COOKIE_STORAGE_URI");
 
+			// Create the new Storage URI
+			Uri storageUri = new Uri(azureStorageUri);
+
+			//Create the blob client object.
+			CloudBlobClient blobClient = new CloudBlobClient(storageUri);
+
+			//Get a reference to a container to use for the sample code, and create it if it does not exist.
+			CloudBlobContainer container = blobClient.GetContainerReference("keys");
+
 			services.AddDataProtection()
-				.PersistKeysToAzureBlobStorage(new Uri(azureStorageUri))
+				.PersistKeysToAzureBlobStorage(container, "cookies")
 				.SetApplicationName("ThAmCo");
 
 			services.AddAuthentication("Cookies")
