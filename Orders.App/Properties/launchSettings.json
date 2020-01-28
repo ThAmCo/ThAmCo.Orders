@@ -13,7 +13,7 @@
       "launchBrowser": true,
 		"environmentVariables": {
 			"ASPNETCORE_ENVIRONMENT": "Development",
-			"COOKIE_STORAGE_URI": "https://thamcostorage.blob.core.windows.net/?sv=2019-02-02&ss=b&srt=sco&sp=rwdlac&se=2021-02-28T08:54:07Z&st=2020-01-28T00:54:07Z&sip=82.21.9.57&spr=https&sig=jD%2FyfDw0nGq1P6E4Jrt0O0IXCqTOeB8AAK5yTCzJLoM%3D"
+			"BLOB_STORAGE_KEY": "zDtWZyEDZ/I/c09yYiOMbdEK1AYqxgvpTIOsWvM69gd8l4oPoPU2/wFeuVLtq7UhdrYaLWH+fJ7YnI+RaLsC3g=="
 		}
     },
     "Orders.App": {
@@ -22,7 +22,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
 		"environmentVariables": {
 			"ASPNETCORE_ENVIRONMENT": "Development",
-			"COOKIE_STORAGE_URI": "https://thamcostorage.blob.core.windows.net/?sv=2019-02-02&ss=b&srt=sco&sp=rwdlac&se=2021-02-28T08:54:07Z&st=2020-01-28T00:54:07Z&sip=82.21.9.57&spr=https&sig=jD%2FyfDw0nGq1P6E4Jrt0O0IXCqTOeB8AAK5yTCzJLoM%3D"
+			"BLOB_STORAGE_KEY": "zDtWZyEDZ/I/c09yYiOMbdEK1AYqxgvpTIOsWvM69gd8l4oPoPU2/wFeuVLtq7UhdrYaLWH+fJ7YnI+RaLsC3g=="
 		}
     }
   }

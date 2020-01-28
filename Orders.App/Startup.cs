@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Auth;
 using Microsoft.Azure.Storage.Blob;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,15 +50,12 @@ namespace Orders.App
 				services.AddScoped<IInvoicesService, HttpInvoicesService>();
 			}
 
-			string azureStorageUri = Environment.GetEnvironmentVariable("COOKIE_STORAGE_URI");
+			string storageKey = Environment.GetEnvironmentVariable("BLOB_STORAGE_KEY");
 
-			// Create the new Storage URI
-			Uri storageUri = new Uri(azureStorageUri);
+			var credentials = new StorageCredentials("thamcostorage", storageKey);
+			var storageAccount = new CloudStorageAccount(credentials, true);
+			var blobClient = storageAccount.CreateCloudBlobClient();
 
-			//Create the blob client object.
-			CloudBlobClient blobClient = new CloudBlobClient(storageUri);
-
-			//Get a reference to a container to use for the sample code, and create it if it does not exist.
 			CloudBlobContainer container = blobClient.GetContainerReference("keys");
 
 			services.AddDataProtection()
