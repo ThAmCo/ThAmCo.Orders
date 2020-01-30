@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Orders.App.Models;
 using Orders.App.Services;
@@ -23,8 +25,9 @@ namespace Orders.App.Controllers
 			_invoicesService = invoicesService;
 		}
 
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPost("create")]
-		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,UserId,Email,Address,Price,PurchasheDateTime")] CreateOrderRequest request)
+		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,UserId,Email,Address,Name,Price,PurchasheDateTime")] CreateOrderRequest request)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -32,7 +35,6 @@ namespace Orders.App.Controllers
 			}
 
 			var product = await _unitOfWork.Products.Get(request.ProductId.Value);
-
 			var order = request.ToOrder(product);
 
 			if (await _unitOfWork.Orders.Contains(order))
@@ -48,7 +50,8 @@ namespace Orders.App.Controllers
 			return Ok();
 		}
 
-		[HttpGet("getorders")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[HttpGet("get")]
 		public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
 		{
 			return Ok(await _unitOfWork.Orders.GetAll());
