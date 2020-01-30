@@ -32,12 +32,5 @@ namespace Orders.App.Controllers
 		{
 			return View(await _unitOfWork.Orders.GetAll());
 		}
-
-
-		public IActionResult Odnex()
-		{
-			return View();
-		}
-
     }
 }
