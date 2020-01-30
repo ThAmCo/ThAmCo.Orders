@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using IdentityModel.Client;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Orders.App.Services
@@ -34,6 +35,20 @@ namespace Orders.App.Services
 
 			HttpResponseMessage responseMessage = await client.PostAsJsonAsync(uri, content);
 			return await responseMessage.Content.ReadAsAsync<K>();
+		}
+
+		public static async Task<TokenResponse> GetTokenAsync(this HttpClient client, string authUrl)
+		{
+			var discoDoc = await client.GetDiscoveryDocumentAsync(authUrl);
+			var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+			{
+				Address = discoDoc.TokenEndpoint,
+				ClientId = "thamco_orders_api",
+				ClientSecret = "secret",
+				Scope = "thamco_invoices_api"
+			});
+
+			return tokenResponse;
 		}
 
 	}
