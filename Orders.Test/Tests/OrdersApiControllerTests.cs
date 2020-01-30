@@ -33,7 +33,7 @@ namespace Orders.Test.Tests
 			mockUnitOfWork.SetupGet(x => x.Orders).Returns(repository);
 
 			var mockInvoicesService = new Mock<IInvoicesService>(MockBehavior.Strict);
-			mockInvoicesService.Setup(s => s.PostOrder(It.IsAny<Order>(), It.IsAny<string>())).ReturnsAsync(true);
+			mockInvoicesService.Setup(s => s.PostOrder(It.IsAny<Order>(), It.IsAny<string>())).Verifiable();
 
 			var apiController = new OrdersApiController(mockUnitOfWork.Object, mockInvoicesService.Object);
 
@@ -66,7 +66,7 @@ namespace Orders.Test.Tests
 			mockUnitOfWork.SetupGet(x => x.Products).Returns(products);
 
 			var mockInvoicesService = new Mock<IInvoicesService>(MockBehavior.Strict);
-			mockInvoicesService.Setup(s => s.PostOrder(It.IsAny<Order>(), It.IsAny<string>())).ReturnsAsync(true);
+			mockInvoicesService.Setup(s => s.PostOrder(It.IsAny<Order>(), It.IsAny<string>())).Verifiable();
 
 			var apiController = new OrdersApiController(mockUnitOfWork.Object, mockInvoicesService.Object);
 
