@@ -89,6 +89,7 @@ namespace Orders.App
 					options.Cookie.Path = "/";
 					options.LoginPath = "/Account/Login";
 					options.LogoutPath = "/Account/Logout";
+					options.AccessDeniedPath = "/Home/AccessDenied";
 
 					options.Events.OnRedirectToLogin = context =>
 					{
@@ -104,7 +105,7 @@ namespace Orders.App
 
 					options.Events.OnRedirectToAccessDenied = context =>
 					{
-						context.HttpContext.Response.Redirect(homeBaseUrl + "/accessdenied");
+						context.HttpContext.Response.Redirect(homeBaseUrl + options.AccessDeniedPath);
 						return Task.CompletedTask;
 					};
 				});
@@ -117,17 +118,10 @@ namespace Orders.App
 				});
 			});
 
-			using var response = new HttpResponseMessage()
-			{
-				Content = new StringContent("Fallback response!"),
-				StatusCode = HttpStatusCode.OK
-			};
-
 			services.AddHttpClient("PollyClient")
 					.AddTransientHttpErrorPolicy(p => p.OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
 					.WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
-					.AddTransientHttpErrorPolicy(prop => prop.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)))
-					.AddTransientHttpErrorPolicy(b => b.FallbackAsync(response));
+					.AddTransientHttpErrorPolicy(prop => prop.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
