@@ -7,7 +7,7 @@ namespace Orders.App.Services
 	public interface IInvoicesService
 	{
 
-		public Task<bool> PostOrder(Order order, string email);
+		public Task PostOrder(Order order, string email);
 
 	}
 }
