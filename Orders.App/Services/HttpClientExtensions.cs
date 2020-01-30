@@ -40,6 +40,12 @@ namespace Orders.App.Services
 		public static async Task<TokenResponse> GetTokenAsync(this HttpClient client, string authUrl)
 		{
 			var discoDoc = await client.GetDiscoveryDocumentAsync(authUrl);
+
+			if (discoDoc.IsError)
+			{
+				throw new HttpRequestException(discoDoc.HttpErrorReason);
+			}
+
 			var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
 			{
 				Address = discoDoc.TokenEndpoint,
