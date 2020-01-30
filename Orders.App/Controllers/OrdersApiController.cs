@@ -27,7 +27,7 @@ namespace Orders.App.Controllers
 
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[HttpPost("create")]
-		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,UserId,Email,Address,Name,Price,PurchasheDateTime")] CreateOrderRequest request)
+		public async Task<IActionResult> CreateOrder([FromBody, Bind("ProductId,UserId,Email,Address,Name,Price,PurchaseDateTime")] CreateOrderRequest request)
 		{
 			if (!ModelState.IsValid)
 			{
